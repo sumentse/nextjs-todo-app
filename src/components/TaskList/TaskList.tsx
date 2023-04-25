@@ -1,10 +1,11 @@
 import { TaskListResponse } from "@/hooks/queries/useQueryGetTasks";
 import Task from "../Task";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { AddTask } from "@/hooks/queries/useMutationAddTask";
 import DOMPurify from "dompurify";
 import { EditTask } from "@/hooks/queries/useMutationEditTask";
 import { Task as TaskItem } from "@/services/firebaseAPI";
+import debounce from "lodash/debounce";
 
 interface TaskListProps {
   tasks: TaskListResponse[];
@@ -40,18 +41,22 @@ const TaskList = ({
         return regex.test(title);
       });
     }
-  },[searchTerm, tasks]);
+  }, [searchTerm, tasks]);
+
+  const searchHandler = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchTerm(event.target.value);
+
+  const debouncedSearchHandler = useMemo(
+    () => debounce(searchHandler, 1000),
+    []
+  );
 
   useEffect(() => {
     setTaskListData(filterTasks());
-  }, [filterTasks, tasks, searchTerm]);
+  }, [filterTasks]);
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
-  };
-
-  const handleSearch = (text: string) => {
-    setSearchTerm(text);
   };
 
   const handleAddTaskAndClearInput = () => {
@@ -68,7 +73,7 @@ const TaskList = ({
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
       <input
         type="text"
-        onChange={(event) => handleSearch(event.target.value)}
+        onChange={debouncedSearchHandler}
         placeholder="Search tasks"
         className="border w-full border-gray-300 py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-5"
       />

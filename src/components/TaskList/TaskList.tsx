@@ -1,9 +1,10 @@
 import { TaskListResponse } from "@/hooks/queries/useQueryGetTasks";
 import Task from "../Task";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AddTask } from "@/hooks/queries/useMutationAddTask";
 import DOMPurify from "dompurify";
 import { EditTask } from "@/hooks/queries/useMutationEditTask";
+import { Task as TaskItem } from "@/services/firebaseAPI";
 
 interface TaskListProps {
   tasks: TaskListResponse[];
@@ -26,10 +27,31 @@ const TaskList = ({
   handleEditTask,
   handleDeleteTask,
 }: TaskListProps) => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [taskListData, setTaskListData] = useState<TaskItem[]>([]);
   const [input, setInput] = useState<string>("");
+
+  const filterTasks = useCallback(() => {
+    if (!searchTerm.trim()) {
+      return tasks;
+    } else {
+      const regex = new RegExp(searchTerm, "i");
+      return tasks.filter(({ title }) => {
+        return regex.test(title);
+      });
+    }
+  },[searchTerm, tasks]);
+
+  useEffect(() => {
+    setTaskListData(filterTasks());
+  }, [filterTasks, tasks, searchTerm]);
 
   const handleUserInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
+  };
+
+  const handleSearch = (text: string) => {
+    setSearchTerm(text);
   };
 
   const handleAddTaskAndClearInput = () => {
@@ -44,8 +66,14 @@ const TaskList = ({
   return (
     <div className="pl-5 mt-4">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+      <input
+        type="text"
+        onChange={(event) => handleSearch(event.target.value)}
+        placeholder="Search tasks"
+        className="border w-full border-gray-300 py-2 px-4 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mb-5"
+      />
       <div className="overflow-y-auto h-64">
-        {tasks.map((task) => (
+        {taskListData.map((task) => (
           <Task
             key={task.id}
             handleEditTask={handleEditTask}

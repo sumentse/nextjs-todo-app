@@ -4,7 +4,7 @@ import { update } from "@/services/firebaseAPI";
 
 export interface EditTask {
   id: string;
-  title: string;
+  title?: string;
   completed?: boolean;
 }
 

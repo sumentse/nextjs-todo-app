@@ -41,6 +41,8 @@ const Task = ({
     setIsEditing(false);
   };
 
+  const handleToggle = () => handleEditTask({ id, completed: !completed });
+
   return (
     <div className="flex items-center justify-between mb-2">
       {isEditing ? (
@@ -67,12 +69,19 @@ const Task = ({
         </>
       ) : (
         <>
-          <span
-            className={`${completed ? "line-through" : ""}`}
-          >
-            {title}
-          </span>
           <div>
+            <input
+              type="checkbox"
+              className="mr-2"
+              checked={completed}
+              onChange={handleToggle}
+            />
+            <span className={`${completed ? "line-through" : ""}`}>
+              {title}
+            </span>
+          </div>
+
+          <div className="mr-2">
             <button
               className="mr-2 text-blue-500 hover:text-blue-700"
               onClick={handleEditClick}

@@ -22,7 +22,7 @@ const Home = () => {
 
   return (
     <main className="mt-20">
-      <div className="w-full max-w-sm mx-auto">
+      <div className="w-full max-w-lg mx-auto">
         <TaskList
           handleAddTask={handleAddTask}
           handleDeleteTask={handleDeleteTask}

@@ -5,8 +5,6 @@ import { create } from "@/services/firebaseAPI";
 export interface AddTask {
   title: string;
   completed: boolean;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 const addTask = async (params: AddTask) => {

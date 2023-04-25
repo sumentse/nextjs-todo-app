@@ -42,15 +42,27 @@ const TaskList = ({
     return null;
   }
   return (
-    <div className="list-disc pl-5 mt-4">
+    <div className="pl-5 mt-4">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
+      <div className="overflow-y-auto h-64">
+        {tasks.map((task) => (
+          <Task
+            key={task.id}
+            handleEditTask={handleEditTask}
+            handleDeleteTask={handleDeleteTask}
+            isEditTaskLoading={isEditTaskLoading}
+            isDeleteTaskLoading={isDeleteTaskLoading}
+            {...task}
+          />
+        ))}
+      </div>
 
-      <div className="w-full max-w-sm mb-4">
+      <div className="w-full max-w-lg mb-4">
         <div className="flex items-center border-b-2 border-teal-500 py-2">
           <input
             className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
             type="text"
-            maxLength={100}
+            maxLength={45}
             value={input}
             placeholder="Add todo..."
             onChange={handleUserInput}
@@ -65,16 +77,6 @@ const TaskList = ({
           </button>
         </div>
       </div>
-      {tasks.map((task) => (
-        <Task
-          key={task.id}
-          handleEditTask={handleEditTask}
-          handleDeleteTask={handleDeleteTask}
-          isEditTaskLoading={isEditTaskLoading}
-          isDeleteTaskLoading={isDeleteTaskLoading}
-          {...task}
-        />
-      ))}
     </div>
   );
 };

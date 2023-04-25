@@ -33,7 +33,7 @@ const TaskList = ({
   };
 
   const handleAddTaskAndClearInput = () => {
-    if (input.length === 0) return;
+    if (!input.trim()) return;
     handleAddTask({ title: DOMPurify.sanitize(input), completed: false });
     setInput("");
   };

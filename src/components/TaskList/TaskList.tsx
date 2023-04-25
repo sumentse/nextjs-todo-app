@@ -68,6 +68,7 @@ const TaskList = ({
             onChange={handleUserInput}
           />
           <button
+            title="add task"
             className="flex-shrink-0 bg-teal-500 enabled:hover:bg-teal-700 border-teal-500 enabled:hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded disabled:opacity-50"
             type="button"
             disabled={isAddTaskLoading}

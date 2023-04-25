@@ -54,6 +54,7 @@ const Task = ({
             onChange={handleInputChange}
           />
           <button
+            title="save edit"
             className="text-green-500 enabled:hover:text-green-700 mr-2"
             onClick={handleSaveClick}
             disabled={isEditTaskLoading}
@@ -61,6 +62,7 @@ const Task = ({
             Save
           </button>
           <button
+            title="cancel edit"
             className="text-gray-500 hover:text-gray-700"
             onClick={handleCancelClick}
           >

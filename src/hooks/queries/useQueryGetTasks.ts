@@ -6,6 +6,7 @@ export interface TaskListResponse {
   id: string;
   title: string;
   completed: boolean;
+  order: number;
   createdAt: Date;
   updatedAt: Date;
 }

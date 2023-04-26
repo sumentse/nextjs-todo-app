@@ -3,6 +3,8 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "@/styles/globals.css";
 import { initializeApp } from "firebase/app";
 import type { AppProps } from "next/app";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const queryClient = new QueryClient();
 
@@ -19,11 +21,13 @@ initializeApp(firebaseConfig);
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
-      {process.env.NODE_ENV === "development" && (
-        <ReactQueryDevtools initialIsOpen={false} />
-      )}
-    </QueryClientProvider>
+    <DndProvider backend={HTML5Backend}>
+      <QueryClientProvider client={queryClient}>
+        <Component {...pageProps} />
+        {process.env.NODE_ENV === "development" && (
+          <ReactQueryDevtools initialIsOpen={false} />
+        )}
+      </QueryClientProvider>
+    </DndProvider>
   );
 }

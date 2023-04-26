@@ -5,7 +5,7 @@ import { AddTask } from "@/hooks/queries/useMutationAddTask";
 import DOMPurify from "dompurify";
 import { EditTask } from "@/hooks/queries/useMutationEditTask";
 import { Task as TaskItem } from "@/services/firebaseAPI";
-import debounce from "lodash/debounce";
+import { debounce } from "lodash";
 import { SwapOrder } from "@/types";
 
 interface TaskListProps {
@@ -17,7 +17,7 @@ interface TaskListProps {
   handleAddTask: (data: AddTask) => void;
   handleEditTask: (data: EditTask) => void;
   handleDeleteTask: (id: string) => void;
-  handleOrderSwap: (source: SwapOrder, target: SwapOrder)=>void;
+  handleOrderSwap: (source: SwapOrder, target: SwapOrder) => void;
 }
 
 const TaskList = ({
@@ -29,7 +29,7 @@ const TaskList = ({
   handleAddTask,
   handleEditTask,
   handleDeleteTask,
-  handleOrderSwap
+  handleOrderSwap,
 }: TaskListProps) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [taskListData, setTaskListData] = useState<TaskItem[]>([]);

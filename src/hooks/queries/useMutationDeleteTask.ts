@@ -9,8 +9,9 @@ const deleteTask = async (id: string) => {
 
 const useMutationDeleteTask = () => {
   const queryClient = useQueryClient();
-  return useMutation(deleteTask, {
-    onSuccess: () => {
+  return useMutation({
+    mutationFn: deleteTask,
+    onSettled: () => {
       queryClient.invalidateQueries(queryKeys.listTasks());
     },
   });

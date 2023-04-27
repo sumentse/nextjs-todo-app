@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import queryKeys from "./queryKeys";
-import { update } from "@/services/firebaseAPI";
+import { Task, update } from "@/services/firebaseAPI";
 
 export interface EditTask {
   id: string;
@@ -16,8 +16,36 @@ const updateTask = async (params: EditTask) => {
 
 const useMutationUpdateTask = () => {
   const queryClient = useQueryClient();
-  return useMutation(updateTask, {
-    onSuccess: () => {
+  return useMutation({
+    mutationFn: updateTask,
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: queryKeys.listTasks() });
+      const previousTodo =
+        queryClient.getQueryData<Task[]>(queryKeys.listTasks()) || [];
+      const newToDo = previousTodo.map((todo) => {
+        if (todo.id === data.id) {
+          return {
+            ...todo,
+            ...(data.completed !== undefined && { completed: data.completed }),
+            ...(data.title && { title: data.title }),
+          };
+        }
+        return todo;
+      });
+
+      queryClient.setQueryData(queryKeys.listTasks(), newToDo);
+
+      return {
+        previousTodo,
+        newToDo,
+      };
+    },
+    onError: (err, newTodo, context) => {
+      if (context) {
+        queryClient.setQueryData(queryKeys.listTasks(), context.previousTodo);
+      }
+    },
+    onSettled: () => {
       queryClient.invalidateQueries(queryKeys.listTasks());
     },
   });

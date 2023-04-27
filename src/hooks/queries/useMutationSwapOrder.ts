@@ -14,8 +14,9 @@ const swapTaskOrder = async (params: {
 
 const useMutationSwapOrder = () => {
   const queryClient = useQueryClient();
-  return useMutation(swapTaskOrder, {
-    onSuccess: () => {
+  return useMutation({
+    mutationFn: swapTaskOrder,
+    onSettled: () => {
       queryClient.invalidateQueries(queryKeys.listTasks());
     },
   });
